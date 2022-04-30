@@ -5,7 +5,6 @@ const MovieCard = ({movie, selectMovie}) => {
   const IMAGE_PATH = "https://imdb-api.com/images/original/"
  
   return (
-    
     <div className={"movie-card"} onClick={() => selectMovie(movie)}>
         {movie.image ? <img className={"movie-cover"} src={`${movie.image}`} alt={`${movie.title}`}/>
         : 

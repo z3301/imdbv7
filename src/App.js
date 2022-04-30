@@ -16,7 +16,7 @@ function App() {
   const fetchMovies = async () => {
     const {data: {items}} = await axios.get(`${API_URL}/InTheaters/${API_KEY}`)
 
-    setSelectedMovie(items[0])
+    setSelectedMovie(items[0]) 
     setMovies(items)
   }
 
@@ -31,7 +31,6 @@ function App() {
   }, [])
 
   const renderMovies = () => (
-
     movies.map(movie => (
       <MovieCard
         key={movie.id} 
@@ -61,12 +60,14 @@ function App() {
       <div className="hero" style={{ backgroundImage: `url('${selectedMovie.image}')`}}>
         {console.log(selectedMovie)}
         <div className="hero-content max-center">
-          <YouTube 
-          />
           <button className="button">Play Trailer</button>
           <h1 className="hero-title">{selectedMovie.title}</h1>
           {selectedMovie.plot ? <p className="hero-plot">{selectedMovie.plot}</p> : null} 
         </div>
+      </div>
+
+      <div className="max-center">
+        <h3 className="topRowTitle">Now in Theaters</h3>
       </div>
 
       <div className="container max-center">  
