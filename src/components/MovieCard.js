@@ -1,16 +1,15 @@
 import React from 'react'
 
-const MovieCard = ({movie}) => {
+const MovieCard = ({movie, selectMovie}) => {
   
   const IMAGE_PATH = "https://imdb-api.com/images/original/"
-
-  console.log(movie)
  
   return (
     
-    <div className={"movie-card"}>
+    <div className={"movie-card"} onClick={() => selectMovie(movie)}>
         {movie.image ? <img className={"movie-cover"} src={`${movie.image}`} alt={`${movie.title}`}/>
-        : null}
+        : 
+        <div className="movie-placeholder">No Image Available</div>}
         <h5 className={"movie-title"}>{movie.title}</h5>
     </div>
   )

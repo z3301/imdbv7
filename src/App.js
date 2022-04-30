@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios';
 import './App.css';
 import MovieCard from './components/MovieCard'
+import YouTube from 'react-youtube'
 
 function App() { 
 
@@ -9,17 +10,22 @@ function App() {
   const API_KEY = process.env.REACT_APP_MOVIE_API_KEY
 
   const [movies, setMovies] = useState([])
+  const [selectedMovie, setSelectedMovie] = useState({})
   const [searchKey, setSearchKey] = useState('')
 
-  const fetchMovies = async (searchKey) => {
-    const type = searchKey ? 'Search' : 'MostPopularMovies'
-    const query = searchKey ? searchKey : ''
-    const {data: {items}} = await axios.get(`${API_URL}/${type}/${API_KEY}/${query}`)
+  const fetchMovies = async () => {
+    const {data: {items}} = await axios.get(`${API_URL}/InTheaters/${API_KEY}`)
 
+    setSelectedMovie(items[0])
     setMovies(items)
-    console.log(items)
   }
 
+  const searchMovies = async (searchKey) => {
+    const {data: {results}} = await axios.get(`${API_URL}/Search/${API_KEY}/${searchKey}`)
+
+    setMovies(results)
+  }
+  
   useEffect( () => {
     fetchMovies()
   }, [])
@@ -30,27 +36,40 @@ function App() {
       <MovieCard
         key={movie.id} 
         movie={movie}
+        selectMovie={setSelectedMovie}
       />
     ))
   )
 
-      const searchMovies = (e) => {
-        e.preventDefault()
-        fetchMovies(searchKey)
-      }
+  const searchFunction = (e) => {
+    e.preventDefault()
+    searchMovies(searchKey)
+  }
 
   return (
     <div className="App">
-      
-      <header>
-        <h1>MovieDB</h1>
-        <form onSubmit={searchMovies}>
-          <input type="text" onChange={(e) => setSearchKey(e.target.value)} />
-          <button type="submit">Search</button>
-        </form>
+      <header className="header">
+        <div className="header-content max-center">
+          <span>MovieDB</span>
+          <form onSubmit={searchFunction}>
+            <input type="text" onChange={(e) => setSearchKey(e.target.value)} />
+            <button type="submit">Search</button>
+          </form>
+        </div>
       </header>
-      {searchKey}
-      <div className="container">  
+      
+      <div className="hero" style={{ backgroundImage: `url('${selectedMovie.image}')`}}>
+        {console.log(selectedMovie)}
+        <div className="hero-content max-center">
+          <YouTube 
+          />
+          <button className="button">Play Trailer</button>
+          <h1 className="hero-title">{selectedMovie.title}</h1>
+          {selectedMovie.plot ? <p className="hero-plot">{selectedMovie.plot}</p> : null} 
+        </div>
+      </div>
+
+      <div className="container max-center">  
         {renderMovies()}
       </div>
 
